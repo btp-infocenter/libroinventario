@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd.zsd_libroinventario.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="LibroInvJerarquiaParameters">
+                <Key>
+                    <PropertyRef Name="P_FiscalPeriodFrom"/>
+                    <PropertyRef Name="P_FiscalPeriodTo"/>
+                    <PropertyRef Name="P_FinancialStatementHierarchy"/>
+                </Key>
+                <Property Name="P_FiscalPeriodFrom" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="P_FiscalPeriodTo" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="P_FinancialStatementHierarchy" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <NavigationProperty Name="Set" Type="Collection(com.sap.gateway.srvd.zsd_libroinventario.v0001.LibroInvJerarquiaType)" Partner="Parameters" ContainsTarget="true"/>
+            </EntityType>
+            <EntityType Name="LibroInvJerarquiaType">
+                <Key>
+                    <PropertyRef Name="FinancialStatementHierarchy"/>
+                    <PropertyRef Name="HierarchyNode"/>
+                    <PropertyRef Name="ValidityEndDate"/>
+                    <PropertyRef Name="CompanyCode"/>
+                    <PropertyRef Name="Ledger"/>
+                    <PropertyRef Name="FiscalYear"/>
+                    <PropertyRef Name="AccountingDocument"/>
+                    <PropertyRef Name="LedgerGLLineItem"/>
+                </Key>
+                <Property Name="FinancialStatementHierarchy" Type="Edm.String" Nullable="false" MaxLength="42"/>
+                <Property Name="HierarchyNode" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="ValidityEndDate" Type="Edm.Date" Nullable="false"/>
+                <Property Name="CompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="Ledger" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FiscalYear" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="AccountingDocument" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="LedgerGLLineItem" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="ValidityStartDate" Type="Edm.Date"/>
+                <Property Name="ChartOfAccounts" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="ParentNode" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="HierarchyLevel" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="HierarchyNodeSequence" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="FinancialStatementLeafItem" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="FinStmntNodeFormattedID" Type="Edm.String" Nullable="false" MaxLength="32"/>
+                <Property Name="HierarchyNodeVal" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FinancialStatementNodeType" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="NodeText" Type="Edm.String" Nullable="false" MaxLength="150"/>
+                <Property Name="HierarchyNodeText" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="GLAccountText" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="GLAccount" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="GLAccountLongName" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="FinancialAccountType" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="BusinessPartner" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="BusinessPartnerName" Type="Edm.String" Nullable="false" MaxLength="80"/>
+                <Property Name="Product" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="ProductName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="DocumentItemText" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="CompanyCodeCurrency" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="AmountInCompanyCodeCurrency" Type="Edm.Decimal" Nullable="false" Precision="23" Scale="2"/>
+                <Property Name="SaldoDisplay" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="__HierarchyPropertiesForZI_FinancialStmtHierarchy" Type="com.sap.gateway.srvd.zsd_libroinventario.v0001.HierarchyPropertiesForZI_FinancialStmtHierarchy"/>
+                <NavigationProperty Name="Parameters" Type="com.sap.gateway.srvd.zsd_libroinventario.v0001.LibroInvJerarquiaParameters" Nullable="false"/>
+                <NavigationProperty Name="_Parent" Type="com.sap.gateway.srvd.zsd_libroinventario.v0001.LibroInvJerarquiaType"/>
+            </EntityType>
+            <ComplexType Name="HierarchyPropertiesForZI_FinancialStmtHierarchy">
+                <Property Name="NodeId" Type="Edm.String" Nullable="false"/>
+                <Property Name="DescendantCount" Type="Edm.Int64" Nullable="false"/>
+                <Property Name="LimitedDescendantCount" Type="Edm.Int64" Nullable="false"/>
+                <Property Name="DrillState" Type="Edm.String" Nullable="false"/>
+                <Property Name="DistanceFromRoot" Type="Edm.Int64" Nullable="false"/>
+                <Property Name="LimitedRank" Type="Edm.Int64" Nullable="false"/>
+            </ComplexType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="LibroInvJerarquia" EntityType="com.sap.gateway.srvd.zsd_libroinventario.v0001.LibroInvJerarquiaParameters">
+                    <NavigationPropertyBinding Path="Set/Parameters" Target="LibroInvJerarquia"/>
+                </EntitySet>
+            </EntityContainer>
+            <Annotations Target="SAP__self.LibroInvJerarquiaParameters/P_FiscalPeriodFrom">
+                <Annotation Term="SAP__common.Label" String="Período Desde"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Período contable"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Heading" String="Período"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=POPER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaParameters/P_FiscalPeriodTo">
+                <Annotation Term="SAP__common.Label" String="Período Hasta"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Período contable"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Heading" String="Período"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=POPER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaParameters/P_FinancialStatementHierarchy">
+                <Annotation Term="SAP__common.Label" String="Estado Balance"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Campo de texto, longitud 10"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/LibroInvJerarquia">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="Set"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>P_FiscalPeriodFrom</PropertyPath>
+                                <PropertyPath>P_FiscalPeriodTo</PropertyPath>
+                                <PropertyPath>P_FinancialStatementHierarchy</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>P_FiscalPeriodFrom</PropertyPath>
+                                <PropertyPath>P_FiscalPeriodTo</PropertyPath>
+                                <PropertyPath>P_FinancialStatementHierarchy</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Readable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>Set</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.CreateHidden"/>
+                <Annotation Term="SAP__UI.DeleteHidden"/>
+                <Annotation Term="SAP__UI.UpdateHidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaParameters">
+                <Annotation Term="SAP__common.ResultContext"/>
+                <Annotation Term="SAP__aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>filter</String>
+                                <String>orderby</String>
+                                <String>ancestors</String>
+                                <String>descendants</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FinancialStatementHierarchy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="ID jerarquía"/>
+                <Annotation Term="SAP__common.QuickInfo" String="ID de jerarquía"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=HRYID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/CompanyCode">
+                <Annotation Term="SAP__common.Label" String="Sociedad"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Sociedad"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Sociedad"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/Ledger">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Ledger"/>
+                <Annotation Term="SAP__common.Heading" String="Ld"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Ledger en contabilidad principal"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=FINS_LEDGER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FiscalYear">
+                <Annotation Term="SAP__common.Label" String="Ejercicio Fiscal"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Heading" String="Ejercicio"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Ejercicio"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/HierarchyLevel">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nivel jerárquico"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/HierarchyNodeSequence">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Número de secuencia"/>
+                <Annotation Term="SAP__common.Heading" String="Número de secuencia jerárquica"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Número de secuencia jerárquica"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FinStmntNodeFormattedID">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nodo para extracción"/>
+                <Annotation Term="SAP__common.Heading" String="Nodo jerarquía para extracción"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Nodo de jerarquía para extracción"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FinancialStatementNodeType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Tipo nodo"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Tipo nodo de balance financiero"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/NodeText">
+                <Annotation Term="SAP__common.Label" String="Descripción"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/GLAccount">
+                <Annotation Term="SAP__common.Label" String="Cuenta"/>
+                <Annotation Term="SAP__common.Text" Path="GLAccountLongName">
+                    <Annotation Term="SAP__UI.TextArrangement" EnumMember="SAP__UI.TextArrangementType/TextLast"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FinancialAccountType">
+                <Annotation Term="SAP__common.Label" String="Tipo de Cuenta"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/BusinessPartner">
+                <Annotation Term="SAP__common.Label" String="Interlocutor Comercial"/>
+                <Annotation Term="SAP__common.Text" Path="BusinessPartnerName">
+                    <Annotation Term="SAP__UI.TextArrangement" EnumMember="SAP__UI.TextArrangementType/TextLast"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/Product">
+                <Annotation Term="SAP__common.Label" String="Producto"/>
+                <Annotation Term="SAP__common.Text" Path="ProductName">
+                    <Annotation Term="SAP__UI.TextArrangement" EnumMember="SAP__UI.TextArrangementType/TextLast"/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/CompanyCodeCurrency">
+                <Annotation Term="SAP__common.IsCurrency"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/AmountInCompanyCodeCurrency">
+                <Annotation Term="SAP__measures.ISOCurrency" Path="CompanyCodeCurrency"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/SaldoDisplay">
+                <Annotation Term="SAP__common.Label" String="Saldo"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/__HierarchyPropertiesForZI_FinancialStmtHierarchy">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType">
+                <Annotation Term="SAP__common.Label" String="Financial Statement Hierarchy with Amounts"/>
+                <Annotation Term="SAP__common.SemanticKey">
+                    <Collection>
+                        <PropertyPath>HierarchyNode</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__hierarchy.RecursiveHierarchyActions" Qualifier="ZI_FinancialStmtHierarchy">
+                    <Record>
+                        <PropertyValue Property="ChangeSiblingForRootsSupported" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>filter</String>
+                                <String>orderby</String>
+                                <String>ancestors</String>
+                                <String>descendants</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Facets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Información General"/>
+                            <PropertyValue Property="ID" String="GeneralInfo"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Estructura de Balance"/>
+                        <PropertyValue Property="TypeNamePlural" String="Estructura de Balance"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="NodeText"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Description">
+                            <Record Type="SAP__UI.DataField">
+                                <PropertyValue Property="Value" Path="HierarchyNode"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__UI.Identification">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NodeText"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GLAccount"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="FinancialAccountType"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SaldoDisplay"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BusinessPartner"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Product"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="NodeText"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="GLAccount"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/Medium"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="FinancialAccountType"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/Medium"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="SaldoDisplay"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="BusinessPartner"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/Medium"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Value" Path="Product"/>
+                            <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/Medium"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>CompanyCode</PropertyPath>
+                        <PropertyPath>FiscalYear</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.RecursiveHierarchy" Qualifier="ZI_FinancialStmtHierarchy">
+                    <Record>
+                        <PropertyValue Property="NodeProperty" PropertyPath="__HierarchyPropertiesForZI_FinancialStmtHierarchy/NodeId"/>
+                        <PropertyValue Property="ParentNavigationProperty" NavigationPropertyPath="_Parent"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__hierarchy.RecursiveHierarchy" Qualifier="ZI_FinancialStmtHierarchy">
+                    <Record>
+                        <PropertyValue Property="ChildCount">
+                            <Null/>
+                        </PropertyValue>
+                        <PropertyValue Property="DescendantCount" Path="__HierarchyPropertiesForZI_FinancialStmtHierarchy/DescendantCount"/>
+                        <PropertyValue Property="ExternalKey">
+                            <Null/>
+                        </PropertyValue>
+                        <PropertyValue Property="LimitedDescendantCount" Path="__HierarchyPropertiesForZI_FinancialStmtHierarchy/LimitedDescendantCount"/>
+                        <PropertyValue Property="DistanceFromRoot" Path="__HierarchyPropertiesForZI_FinancialStmtHierarchy/DistanceFromRoot"/>
+                        <PropertyValue Property="DrillState" Path="__HierarchyPropertiesForZI_FinancialStmtHierarchy/DrillState"/>
+                        <PropertyValue Property="MatchedDescendantCount">
+                            <Null/>
+                        </PropertyValue>
+                        <PropertyValue Property="Matched">
+                            <Null/>
+                        </PropertyValue>
+                        <PropertyValue Property="NodeType">
+                            <Null/>
+                        </PropertyValue>
+                        <PropertyValue Property="SiblingRank">
+                            <Null/>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.CurrencyCodes">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/HierarchyNode">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nodo"/>
+                <Annotation Term="SAP__common.Heading" String="Nodo de jerarquía"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Nodo de jerarquía"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/ValidityEndDate">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Fin de validez"/>
+                <Annotation Term="SAP__common.Heading" String="A"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Fecha de fin de validez"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=DATBI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/AccountingDocument">
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/LedgerGLLineItem">
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/ValidityStartDate">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Fe.inicio validez"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Fecha de inicio de validez"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/ChartOfAccounts">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Clase nodo"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Clase de nodo"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/ParentNode">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nodo superior"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Nodo superior de jerarquía"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/FinancialStatementLeafItem">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nodo"/>
+                <Annotation Term="SAP__common.Heading" String="Nodo de jerarquía"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Nodo de jerarquía"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/HierarchyNodeVal">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Valor"/>
+                <Annotation Term="SAP__common.Heading" String="Valor de nodo"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Valor de nodo"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/HierarchyNodeText">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Descripción"/>
+                <Annotation Term="SAP__common.Heading" String="Descripción de nodo"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Descripción de nodo de jerarquía"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/GLAccountText">
+                <Annotation Term="SAP__UI.Hidden"/>
+                <Annotation Term="SAP__common.Label" String="Nombre cta.mayor"/>
+                <Annotation Term="SAP__common.Heading" String="Nombre de cuenta de mayor"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Nombre de cuenta de mayor"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/GLAccountLongName">
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/BusinessPartnerName">
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.LibroInvJerarquiaType/ProductName">
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/LibroInvJerarquia/Set">
+                <Annotation Term="SAP__hierarchy.RecursiveHierarchySupported" Qualifier="ZI_FinancialStmtHierarchy"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

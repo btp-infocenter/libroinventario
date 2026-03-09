@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: libroinv
+description: Libro de Inventario - Fiori Elements App
+version: 0.0.1
+modules:
+- name: libroinv-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: libroinv-destination-service
+    parameters:
+      content-target: true
+  - name: libroinv-repo-host
+    parameters:
+      service-key:
+        name: libroinv-repo-host-key
+  - name: libroinv-uaa
+    parameters:
+      service-key:
+        name: libroinv-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: libroinv_html_repo_host
+          ServiceInstanceName: libroinv-html5-service
+          ServiceKeyName: libroinv-repo-host-key
+          sap.cloud.service: libroinv
+        - Authentication: OAuth2UserTokenExchange
+          Name: libroinv_uaa
+          ServiceInstanceName: libroinv-xsuaa-service
+          ServiceKeyName: libroinv-uaa-key
+          sap.cloud.service: libroinv
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: libroinv-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: libroinv-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - libroinv.zip
+      name: libroinv
+      target-path: resources/
+- name: libroinv
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: libroinv-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: libroinv-destination-service
+    service-plan: lite
+- name: libroinv-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: libroinv-xsuaa-service
+    service-plan: application
+- name: libroinv-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: libroinv-html5-service
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

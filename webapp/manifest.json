@@ -1,0 +1,163 @@
+{
+  "_version": "1.73.1",
+  "sap.app": {
+    "id": "libroinv",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.20.0",
+      "toolsId": "43158540-99b0-4b7f-b666-84adc82a2db8"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zsb_libroinventario/srvd/sap/zsd_libroinventario/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.136.11",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "libroinv.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "LibroInvJerarquiaList",
+          "target": "LibroInvJerarquiaList"
+        },
+        {
+          "pattern": "LibroInvJerarquia({key})/Set({key2}):?query:",
+          "name": "LibroInvJerarquiaObjectPage",
+          "target": "LibroInvJerarquiaObjectPage"
+        }
+      ],
+      "targets": {
+        "LibroInvJerarquiaList": {
+          "type": "Component",
+          "id": "LibroInvJerarquiaList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/LibroInvJerarquia/Set",
+              "variantManagement": "Page",
+              "navigation": {
+                "LibroInvJerarquia": {
+                  "detail": {
+                    "route": "LibroInvJerarquiaObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "TreeTable",
+                    "hierarchyQualifier": "ZI_FinancialStmtHierarchy",
+                    "selectAll": false,
+                    "selectionMode": "None"
+                  },
+                  "actions": {
+                    "ListReportExt": {
+                      "press": "libroinv.ext.controller.ListReportExt.exportPdf",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Exportar PDF"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "LibroInvJerarquiaObjectPage": {
+          "type": "Component",
+          "id": "LibroInvJerarquiaObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/LibroInvJerarquia/Set"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}
