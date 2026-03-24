@@ -34,7 +34,7 @@ server:
           - authenticationType: reentranceTicket # SAML support for vscode
             path: /sap
             url: https://my418296.s4hana.cloud.sap
-            destination: CASATUA_NSP100_SAML_CUSTO
+            destination: AGROBAY_PO4_100_CUSTO
     - name: sap-fe-mockserver
       beforeMiddleware: csp
       configuration:

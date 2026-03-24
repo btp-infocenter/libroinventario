@@ -13,16 +13,8 @@ sap.ui.define([
 
     // Configuración de sociedades
     var mCompanyConfig = {
-        "1001": { nombre: "CONSORCIO JGL CASATUA", ruc: "80120839-4" },
-        "1002": { nombre: "Casatua Real Estate", ruc: "80138886-4" },
-        "1003": { nombre: "Casatua Hospitality", ruc: "80133283-4" },
-        "1004": { nombre: "MET Las Lomas S.A.", ruc: "80108863-1" },
-        "1005": { nombre: "Artemio S.A.", ruc: "80135248-7" },
-        "1006": { nombre: "Casa M S.A.", ruc: "80116553-9" },
-        "1007": { nombre: "Matter S.A.", ruc: "80135246-0" },
-        "1008": { nombre: "MET del Sol S.A.", ruc: "80144997-9" },
-        "1009": { nombre: "Cosmopolitan I S.A.", ruc: "80132676-1" },
-        "1010": { nombre: "Casa Grande S.A.", ruc: "80144998-7" }
+        "1001": { nombre: "Agrobay S.A.", ruc: "80120839-4" },
+        "1002": { nombre: "Agrimaster", ruc: "80138886-4" }
     };
 
     /**
