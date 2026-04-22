@@ -13,16 +13,7 @@ sap.ui.define([
 
     // Configuración de sociedades
     var mCompanyConfig = {
-        "1001": { nombre: "CONSORCIO JGL CASATUA", ruc: "80120839-4" },
-        "1002": { nombre: "Casatua Real Estate", ruc: "80138886-4" },
-        "1003": { nombre: "Casatua Hospitality", ruc: "80133283-4" },
-        "1004": { nombre: "MET Las Lomas S.A.", ruc: "80108863-1" },
-        "1005": { nombre: "Artemio S.A.", ruc: "80135248-7" },
-        "1006": { nombre: "Casa M S.A.", ruc: "80116553-9" },
-        "1007": { nombre: "Matter S.A.", ruc: "80135246-0" },
-        "1008": { nombre: "MET del Sol S.A.", ruc: "80144997-9" },
-        "1009": { nombre: "Cosmopolitan I S.A.", ruc: "80132676-1" },
-        "1010": { nombre: "Casa Grande S.A.", ruc: "80144998-7" }
+        "1000": { nombre: "GRUPO INFOCENTER", ruc: "80023118-0" }
     };
 
     /**
@@ -305,7 +296,7 @@ sap.ui.define([
      */
     function getFilterParameters() {
         var oParams = {
-            CompanyCode: "1001",
+            CompanyCode: "1000",
             FiscalYear: new Date().getFullYear().toString()
         };
         
@@ -340,7 +331,7 @@ sap.ui.define([
             var sSearchString = sHash + sUrl;
             
             // Buscar CompanyCode si no se encontró en FilterBar
-            if (oParams.CompanyCode === "1001") {
+            if (oParams.CompanyCode === "1000") {
                 var aCompanyMatch = sSearchString.match(/CompanyCode[=']+'?([^&',)]+)/i);
                 if (aCompanyMatch) {
                     oParams.CompanyCode = aCompanyMatch[1].replace(/[')]/g, "");
@@ -371,7 +362,7 @@ sap.ui.define([
                 return false;
             });
             
-            if (aInputs.length > 0 && oParams.CompanyCode === "1001") {
+            if (aInputs.length > 0 && oParams.CompanyCode === "1000") {
                 var oInput = aInputs[0];
                 var sValue = "";
                 if (oInput.getValue) sValue = oInput.getValue();
@@ -395,7 +386,7 @@ sap.ui.define([
                     // Intentar obtener del path del binding
                     var sPath = oBinding.getPath() || "";
                     var aPathMatch = sPath.match(/CompanyCode='([^']+)'/i);
-                    if (aPathMatch && oParams.CompanyCode === "1001") {
+                    if (aPathMatch && oParams.CompanyCode === "1000") {
                         oParams.CompanyCode = aPathMatch[1];
                         console.log("CompanyCode desde binding path:", oParams.CompanyCode);
                     }
@@ -405,7 +396,7 @@ sap.ui.define([
                     if (aContexts.length > 0) {
                         var oFirstData = aContexts[0].getObject();
                         if (oFirstData) {
-                            if (oFirstData.CompanyCode && oParams.CompanyCode === "1001") {
+                            if (oFirstData.CompanyCode && oParams.CompanyCode === "1000") {
                                 oParams.CompanyCode = oFirstData.CompanyCode;
                                 console.log("CompanyCode desde datos:", oParams.CompanyCode);
                             }
@@ -450,22 +441,18 @@ sap.ui.define([
                             if (oCtx) {
                                 var oRowData = oCtx.getObject();
                                 if (oRowData) {
-                                    // Log para debug de primeros registros
-                                    if (aData.length < 3) {
-                                        console.log("Registro " + aData.length + ":", oRowData);
-                                    }
-                                    
                                     // Actualizar CompanyCode desde los datos si está disponible
                                     if (aData.length === 0 && oRowData.CompanyCode) {
                                         oParams.CompanyCode = oRowData.CompanyCode;
                                     }
-                                    
+
                                     aData.push(oRowData);
                                 }
                             }
                         });
-                        
+
                         console.log("Total datos procesados:", aData.length);
+                        dumpHierarchyTree(aData);
                         fnCallback(aData, oParams);
                     }).catch(function(oError) {
                         console.error("Error en requestContexts:", oError);
@@ -490,6 +477,66 @@ sap.ui.define([
     }
 
     /**
+     * Volcado del árbol para depuración. Imprime cada nodo con indentación por nivel
+     * y expone una tabla (console.table) con los campos clave para detalles D/K/M/S.
+     */
+    function dumpHierarchyTree(aData) {
+        console.groupCollapsed("🌳 Árbol jerárquico (" + aData.length + " filas)");
+
+        var aFlat = [];
+        aData.forEach(function(oRow, iIdx) {
+            var nLevel = parseInt(oRow["@$ui5.node.level"]) || 0;
+            var sIndent = new Array(nLevel + 1).join("  ");
+            var sType = oRow.FinancialAccountType || "";
+            var sGL = oRow.GLAccount || "";
+            var sBP = oRow.BusinessPartner || "";
+            var sBPName = oRow.BusinessPartnerName || "";
+            var sProd = oRow.Product || "";
+            var sDoc = oRow.AccountingDocument || "";
+            var sNode = (oRow.NodeText || "").toString().trim();
+            var sSaldo = (oRow.SaldoDisplay || "").toString().trim();
+            var bIsDetail = !!sDoc;
+
+            // Línea de texto indentada
+            var sLine = sIndent + "L" + nLevel +
+                (sType ? " [" + sType + "]" : "") +
+                (sGL ? " GL=" + sGL : "") +
+                (sBP ? " BP=" + sBP : "") +
+                (sProd ? " PROD=" + sProd : "") +
+                (sDoc ? " DOC=" + sDoc : "") +
+                (sNode ? " | " + sNode : "") +
+                (sBPName ? " | " + sBPName : "") +
+                (sSaldo ? " = " + sSaldo : "");
+            console.log(sLine);
+
+            // Fila plana para tabla
+            aFlat.push({
+                idx: iIdx,
+                level: nLevel,
+                type: sType,
+                GL: sGL,
+                BP: sBP,
+                Product: sProd,
+                Doc: sDoc,
+                NodeText: sNode,
+                BPName: sBPName,
+                Saldo: sSaldo,
+                isDetail: bIsDetail
+            });
+        });
+
+        console.log("---- Tabla (detalles D/K/M/S) ----");
+        console.table(aFlat.filter(function(r) {
+            return r.isDetail && ["D", "K", "M", "S"].indexOf(r.type) >= 0;
+        }));
+
+        // Copia JSON al portapapeles si el usuario lo pide
+        window.__libroinvTree = aFlat;
+        console.log("Árbol completo disponible en: window.__libroinvTree");
+        console.groupEnd();
+    }
+
+    /**
      * Cargar pdfMake dinámicamente
      */
     function loadPdfMake(fnCallback) {
@@ -508,7 +555,7 @@ sap.ui.define([
     // DISEÑO DE TABLA (MODIFICADO)
     // ============================
     function buildPdfDocument(aData, aExpandTypes, oParams) {
-        var sCompanyCode = oParams.CompanyCode || "1001";
+        var sCompanyCode = oParams.CompanyCode || "1000";
         var sFiscalYear = oParams.FiscalYear || new Date().getFullYear().toString();
         var oCompanyInfo = mCompanyConfig[sCompanyCode] || { nombre: "EMPRESA", ruc: "00000000-0" };
         
@@ -517,7 +564,7 @@ sap.ui.define([
         var sDateTime = formatDateTime(oNow);
 
         // 1. Procesar datos
-        var aTableBody = processHierarchyForTable(aData, aExpandTypes,oParams.CompanyCode);
+        var aTableBody = processHierarchyForTable(aData, aExpandTypes);
 
         // 2. Encabezado de la tabla
         var aHeaderRow = [
@@ -713,10 +760,9 @@ sap.ui.define([
     }
 
     /**
-     * Procesa la jerarquía. 
-     * CORRECCIÓN: Se renombra visualmente "PASIVO Y PATRIMONIO" a "PASIVO" para la sociedad 1004.
+     * Procesa la jerarquía para generar las filas de la tabla del PDF.
      */
-    function processHierarchyForTable(aData, aExpandTypes, sCompanyCode) {
+    function processHierarchyForTable(aData, aExpandTypes) {
         var aBody = [];
         
         // =============================================
@@ -728,40 +774,54 @@ sap.ui.define([
             "ACTIVOS": "ACTIVO",
             "PASIVO": "PASIVO",
             "PASIVOS": "PASIVO",
-            
-            // Variaciones para 1004 y estándar
+
+            // Variaciones de pasivo
             "PASIVO CORRIENTE": "PASIVO",
             "PASIVO NO CORRIENTE": "PASIVO",
-            "PASIVO  NO CORRIENTE": "PASIVO", 
-            
+            "PASIVO  NO CORRIENTE": "PASIVO",
+
             "PATRIMONIO": "PATRIMONIO",
-            "PASIVO Y PATRIMONIO": "PASIVO_PATRIMONIO", 
+            "PASIVO Y PATRIMONIO NETO": "PASIVO_PATRIMONIO",
+            "PASIVO Y PATRIMONIO": "PASIVO_PATRIMONIO",
             "PATRIMONIO NETO": "PATRIMONIO",
-            
+
+            "RESULTADOS": "RESULTADOS",
+
             "INGRESOS": "INGRESOS",
             "COSTO OPERATIVO": "COSTO OPERATIVO",
             "COSTOS OPERATIVOS": "COSTO OPERATIVO",
             "GASTOS OPERATIVOS": "GASTOS OPERATIVOS",
-            "CUENTAS SECUNDARIAS": "CUENTAS SECUNDARIAS",
             "MIGRACION": "MIGRACION",
             "MIGRACIÓN": "MIGRACION"
         };
 
+        // Nodos excluidos (matching parcial: si el texto del nodo COMIENZA con alguno de estos, se excluye)
         var EXCLUDED_NODES = [
-            "1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010",
-            "Centas sin Asignar -1004",
-            "1005.",
-            "RESULTADO PYG", 
-            "BENEFICIO CALCULADO", 
-            "PERDIDA CALCULADA", 
+            "1000",
+            "RESULTADO PYG",
+            "RESULTADO PERDIDAS",
+            "RESULTADOS UTILIDAD",
+            "BENEFICIO CALCULADO",
+            "BENEFICIO/PÉRDIDA CALCULADA",
+            "PERDIDA CALCULADA",
             "PÉRDIDA CALCULADA",
-            "CUENTAS SECUNDARIAS"
+            "CUENTAS SECUNDARIAS",
+            "ANEXOS",
+            "CUENTAS SIN ASIGNAR"
         ];
 
         var mCalculatedTotals = {};
         var sCurrentRoot = null;
+        var bPendingRootTitle = false; // true cuando se hizo silent switch y falta renderizar el título
         var nSkippingBelowLevel = -1;
-        var aDetailBuffer = []; 
+        var aDetailBuffer = [];
+
+        // Sub-secciones de RESULTADOS (INGRESOS OPERATIVOS, COSTOS, GASTOS, etc.)
+        var nResultadosTitleLevel = -1; // nivel OData del título visible de RESULTADOS
+        var sCurrentSubSection = null;  // nombre de la sub-sección actual
+        var nSubSectionTotal = 0;       // total acumulado de la sub-sección
+        var bSubSectionHasData = false; // true si la sub-sección tuvo al menos una cuenta
+        var nSubSectionIndent = 0;      // indent de la sub-sección actual
 
         // =============================================
         // 2. HELPERS
@@ -806,28 +866,51 @@ sap.ui.define([
 
         function flushDetails() {
             if (aDetailBuffer.length === 0) return;
-            var nLevel = aDetailBuffer[0].level; 
+
+            // Decidir si las S del grupo deben incluirse: solo si el mismo grupo trae D o K
+            // seleccionado. Si el grupo es puramente M (o no hay tipos seleccionados en él),
+            // las S se descartan.
+            var bGroupHasSelectedDK = aDetailBuffer.some(function(o) {
+                var sT = o.data.FinancialAccountType;
+                return (sT === "D" || sT === "K") && aExpandTypes.indexOf(sT) >= 0;
+            });
+
+            var aRelevant = aDetailBuffer.filter(function(o) {
+                var sT = o.data.FinancialAccountType;
+                if (aExpandTypes.indexOf(sT) >= 0) return true;
+                if (sT === "S" && bGroupHasSelectedDK) return true;
+                return false;
+            });
+
+            aDetailBuffer = [];
+            if (aRelevant.length === 0) return;
+
+            var nLevel = aRelevant[0].level;
             var nIndent = Math.max(0, (nLevel - 2) * 10) + 10;
             var mGroups = {};
 
-            aDetailBuffer.forEach(function(oItem) {
-                var oDet = oItem.data; 
+            aRelevant.forEach(function(oItem) {
+                var oDet = oItem.data;
                 var sType = oDet.FinancialAccountType || "";
                 var nAmount = parseSaldoToNumber(oDet.SaldoDisplay);
                 var sKey = "", sName = "", sCode = "";
 
-                if (["D", "K"].includes(sType)) {
+                // D/K siempre agrupan por BusinessPartner.
+                // S se agrupa por BusinessPartner también cuando lo tiene, para sumarse
+                // junto a las filas D/K del mismo socio.
+                if (["D", "K"].includes(sType) || (sType === "S" && oDet.BusinessPartner)) {
                     sCode = oDet.BusinessPartner || "SIN_CODIGO";
                     sName = oDet.BusinessPartnerName || "Socio sin nombre";
-                    sKey = sCode; 
+                    sKey = sCode;
                 } else if (sType === "M") {
                     sCode = oDet.Product || "SIN_PROD";
                     sName = oDet.ProductName || "Producto sin nombre";
                     sKey = sCode;
                 } else {
+                    // S sin BusinessPartner o tipos residuales: una línea por documento
                     sCode = oDet.AccountingDocument || "";
-                    sName = oDet.AccountingDocument || ""; 
-                    sKey = sCode + "_" + (Math.random()); 
+                    sName = oDet.AccountingDocument || "";
+                    sKey = sCode + "_" + (Math.random());
                 }
 
                 if (!mGroups[sKey]) { mGroups[sKey] = { code: sCode, name: sName, amount: 0 }; }
@@ -845,30 +928,47 @@ sap.ui.define([
             aDetailBuffer = [];
         }
 
+        function flushSubSection() {
+            if (!sCurrentSubSection) return;
+            if (bSubSectionHasData) {
+                aBody.push([
+                    { text: "", style: "subtotalLabel", alignment: "left" },
+                    { text: "Total " + sCurrentSubSection, style: "subtotalLabel", margin: [nSubSectionIndent, 3, 0, 10] },
+                    { text: formatAmountNumber(nSubSectionTotal), style: "subtotalAmountBold", margin: [0, 3, 0, 10] }
+                ]);
+            }
+            sCurrentSubSection = null;
+            nSubSectionTotal = 0;
+            bSubSectionHasData = false;
+        }
+
         function closeCurrentRoot() {
             if (!sCurrentRoot) return;
-            var nTotal = mCalculatedTotals[sCurrentRoot] || 0;
-            var sLabel = "Total " + sCurrentRoot; 
-            var bIsPatrimonio = (sCurrentRoot === "PATRIMONIO" || sCurrentRoot === "PATRIMONIO NETO");
 
-            if (bIsPatrimonio) {
+            // Cerrar sub-sección pendiente si estamos en RESULTADOS
+            if (sCurrentRoot === "RESULTADOS") {
+                flushSubSection();
+                nResultadosTitleLevel = -1;
+            }
+
+            var nTotal = mCalculatedTotals[sCurrentRoot] || 0;
+            var sLabel = "Total " + sCurrentRoot;
+
+            // Imprimir subtotal de la sección actual
+            aBody.push([
+                { text: "", style: "subtotalLabel", alignment: "left" },
+                { text: sLabel, style: "subtotalLabel", margin: [0, 5, 0, 25] },
+                { text: formatAmountNumber(nTotal), style: "subtotalAmountBold", margin: [0, 5, 0, 25] }
+            ]);
+
+            // Al cerrar PATRIMONIO, imprimir "Total Pasivo + Patrimonio Neto"
+            if (sCurrentRoot === "PATRIMONIO") {
+                var nTotalPasivo = mCalculatedTotals["PASIVO"] || 0;
+                var nTotalPatrimonio = mCalculatedTotals["PATRIMONIO"] || 0;
                 aBody.push([
                     { text: "", style: "subtotalLabel", alignment: "left" },
-                    { text: sLabel, style: "subtotalLabel", margin: [0, 5, 0, 0] }, 
-                    { text: formatAmountNumber(nTotal), style: "subtotalAmountBold", margin: [0, 5, 0, 0] }
-                ]);
-                var nTotalPN = mCalculatedTotals["PATRIMONIO"] || mCalculatedTotals["PATRIMONIO NETO"] || 0;
-                var nTotalPasivo = mCalculatedTotals["PASIVO"] || 0; 
-                aBody.push([
-                    { text: "", style: "subtotalLabel", alignment: "left" },
-                    { text: "Total Pasivo + Patrimonio Neto", style: "subtotalLabel", margin: [0, 5, 0, 30] }, 
-                    { text: formatAmountNumber(nTotalPN + nTotalPasivo), style: "subtotalAmountBold", margin: [0, 5, 0, 30] }
-                ]);
-            } else {
-                aBody.push([
-                    { text: "", style: "subtotalLabel", alignment: "left" },
-                    { text: sLabel, style: "subtotalLabel", margin: [0, 5, 0, 25] }, 
-                    { text: formatAmountNumber(nTotal), style: "subtotalAmountBold", margin: [0, 5, 0, 25] }
+                    { text: "Total Pasivo + Patrimonio Neto", style: "subtotalLabel", margin: [0, 5, 0, 30] },
+                    { text: formatAmountNumber(nTotalPasivo + nTotalPatrimonio), style: "subtotalAmountBold", margin: [0, 5, 0, 30] }
                 ]);
             }
             sCurrentRoot = null;
@@ -888,15 +988,20 @@ sap.ui.define([
             // Lógica de saltos
             if (nSkippingBelowLevel !== -1 && nLevel <= nSkippingBelowLevel) { nSkippingBelowLevel = -1; }
             if (nSkippingBelowLevel !== -1) { return; }
-            if (EXCLUDED_NODES.includes(sNodeTextUpper)) { nSkippingBelowLevel = nLevel; return; }
+            var bExcluded = EXCLUDED_NODES.some(function(sExcl) {
+                return sNodeTextUpper === sExcl || sNodeTextUpper.indexOf(sExcl) === 0;
+            });
+            if (bExcluded) { nSkippingBelowLevel = nLevel; return; }
             
             var sGLAccount = (oRow.GLAccount || "").toString().trim();
             var bIsDetailNode = !!oRow.AccountingDocument; 
 
             // Buffer de Detalles
+            // Además de los tipos seleccionados, buffereamos S para decidir en flushDetails
+            // si corresponde incluirlos (solo si el mismo grupo trae D o K seleccionado).
             if (bIsDetailNode) {
                 var sAccountType = oRow.FinancialAccountType || "";
-                if (aExpandTypes.includes(sAccountType)) {
+                if (aExpandTypes.includes(sAccountType) || sAccountType === "S") {
                     aDetailBuffer.push({ data: oRow, level: nLevel });
                 }
                 return;
@@ -909,26 +1014,29 @@ sap.ui.define([
             var bShouldSwitchRoot = false;
             var bIgnoreRootSet = false; 
 
-            if (sCompanyCode === "1004") {
-                // CASO ESPECIAL 1004:
-                // Si es "PASIVO Y PATRIMONIO" (Nivel 2), no lo tratamos como root de acumulación,
-                // pero sí lo mostramos como título.
-                if (nLevel === 2 && sNodeTextUpper.indexOf("PASIVO") >= 0 && sNodeTextUpper.indexOf("PATRIMONIO") >= 0) {
-                    if (sCurrentRoot) closeCurrentRoot();
-                    bIgnoreRootSet = true;
-                }
-                // Si estamos en Nivel 3 y es un hijo directo (Pasivo C., Patrimonio, etc)
-                else if (nLevel === 3 && sPotentialRoot) {
-                    bShouldSwitchRoot = true;
-                }
-                // Nivel 2 normal (Activo, Ingresos) para 1004
-                else if (nLevel === 2 && sPotentialRoot && !(sNodeTextUpper.indexOf("PASIVO") >= 0 && sNodeTextUpper.indexOf("PATRIMONIO") >= 0)) {
-                    bShouldSwitchRoot = true;
-                }
-            } else {
-                // CASO ESTÁNDAR
-                if (nLevel === 2 && sPotentialRoot) {
-                    bShouldSwitchRoot = true;
+            // Detectar nodo combinado "PASIVO Y PATRIMONIO" a nivel 2 (aplica a cualquier sociedad)
+            var bIsCombinedPasivoPatrimonio = (nLevel === 2 &&
+                sNodeTextUpper.indexOf("PASIVO") >= 0 && sNodeTextUpper.indexOf("PATRIMONIO") >= 0);
+
+            // Roots primarios: pueden activarse a cualquier nivel dentro del container
+            var PRIMARY_ROOTS = ["ACTIVO", "PASIVO", "PATRIMONIO", "RESULTADOS"];
+            var bSilentSwitch = false; // Switch de root sin renderizar el nodo
+
+            if (bIsCombinedPasivoPatrimonio) {
+                // Nodo contenedor: no se muestra, solo cierra el root anterior.
+                if (sCurrentRoot) closeCurrentRoot();
+                return;
+            } else if (nLevel === 2 && sPotentialRoot) {
+                // Nivel 2 estándar (ACTIVO, etc.)
+                bShouldSwitchRoot = true;
+            } else if (nLevel >= 3 && sPotentialRoot && sPotentialRoot !== sCurrentRoot &&
+                       PRIMARY_ROOTS.indexOf(sPotentialRoot) >= 0) {
+                // Root primario a nivel 3+ (PASIVO, PATRIMONIO, RESULTADOS dentro del container)
+                bShouldSwitchRoot = true;
+                // RESULTADOS nivel 4 es un nodo puente (dentro de PATRIMONIO NETO).
+                // Solo hace el switch, no se renderiza. El RESULTADOS de nivel 5 será el título visible.
+                if (sPotentialRoot === "RESULTADOS" && sCurrentRoot === "PATRIMONIO") {
+                    bSilentSwitch = true;
                 }
             }
 
@@ -943,53 +1051,79 @@ sap.ui.define([
                 sCurrentRoot = null;
             }
 
+            // Si es un switch silencioso, marcar que falta el título y no renderizar este nodo
+            if (bSilentSwitch) {
+                bPendingRootTitle = true;
+                return;
+            }
+
             // --- Filtros de Visualización ---
             var bExpanded = oRow["@$ui5.node.isExpanded"];
             var sSaldoDisplayRaw = (oRow.SaldoDisplay || "").toString();
             var bHasSaldo = sSaldoDisplayRaw.trim() !== "";
             var bIsStructuralNode = (bShouldSwitchRoot || bIgnoreRootSet);
 
+            // Si hay un título de root pendiente y este nodo tiene el mismo texto que el root actual,
+            // renderizarlo como título de root (nivel 1 en el reporte, sin indentación)
+            if (bPendingRootTitle && sPotentialRoot === sCurrentRoot) {
+                bPendingRootTitle = false;
+                bIsStructuralNode = true;
+                // Guardar el nivel OData del título de RESULTADOS para detectar sub-secciones
+                if (sCurrentRoot === "RESULTADOS") {
+                    nResultadosTitleLevel = nLevel;
+                }
+            }
+
+            // --- Detección de sub-secciones dentro de RESULTADOS ---
+            if (sCurrentRoot === "RESULTADOS" && nResultadosTitleLevel > 0 &&
+                nLevel === nResultadosTitleLevel + 1 && !sGLAccount && !bIsDetailNode) {
+                // Nodo hijo directo de RESULTADOS (INGRESOS OPERATIVOS, COSTOS, GASTOS, etc.)
+                flushSubSection();
+                sCurrentSubSection = sNodeText;
+                nSubSectionIndent = Math.max(0, (nLevel - 2) * 10);
+            }
+
             if (!bExpanded && !bHasSaldo && !bIsStructuralNode) { return; }
 
             // --- Acumulación de Totals ---
             if (sCurrentRoot && sGLAccount && !bIsDetailNode && bHasSaldo) {
                 var nVal = parseSaldoToNumber(sSaldoDisplayRaw);
-                if (!oRow._totalsCalculated) { 
+                if (!oRow._totalsCalculated) {
                     mCalculatedTotals[sCurrentRoot] += nVal;
                     oRow._totalsCalculated = true;
+                    // Acumular también en la sub-sección si aplica
+                    if (sCurrentSubSection) {
+                        nSubSectionTotal += nVal;
+                        bSubSectionHasData = true;
+                    }
                 }
             }
 
             // --- Estilos y Texto ---
             var sAccountDesc = (oRow.NodeText || oRow.GLAccountLongName || oRow.GLAccountText || "").toString().trim();
-            
-            // >>>>>>>>>>> CORRECCIÓN AQUÍ <<<<<<<<<<<
-            // Si es sociedad 1004 y el texto es "PASIVO Y PATRIMONIO", lo forzamos a "PASIVO" en el PDF
-            if (sCompanyCode === "1004" && sAccountDesc.toUpperCase() === "PASIVO Y PATRIMONIO") {
-                sAccountDesc = "PASIVO";
-            }
 
             var sAmountFormatted = bHasSaldo ? sSaldoDisplayRaw.replace(/PYG/gi, "").trim() : "";
-            if (sAmountFormatted.endsWith("-")) { sAmountFormatted = "-" + sAmountFormatted.slice(0, -1); }
+            if (sAmountFormatted.endsWith("-")) { sAmountFormatted = "-" + sAmountFormatted.slice(0, -1).trim(); }
 
             var sCodeColumn = sGLAccount || "";
             var sDescColumn = sAccountDesc || sGLAccount;
-            var sRowStyle = "rowItem"; 
+            var sRowStyle = "rowItem";
             var sAmountStyle = "colAmount";
 
             // Estilos dinámicos
             if (bIsStructuralNode) {
-                sRowStyle = "rowGroupRoot"; 
+                sRowStyle = "rowGroupRoot";
                 sAmountStyle = "colAmountBold";
-            } else if (nLevel === 3 && sCompanyCode !== "1004") {
-                sRowStyle = "rowGroup"; 
+            } else if (nLevel === 3) {
+                sRowStyle = "rowGroup";
                 sAmountStyle = "colAmountBold";
             } else if (!bHasSaldo) {
                 sRowStyle = "rowParent";
                 sAmountStyle = "colAmount";
             }
 
-            var nIndent = Math.max(0, (nLevel - 2) * 10);
+            // Nodos estructurales (roots) siempre sin indentación
+            var nIndent = bIsStructuralNode ? 0 : Math.max(0, (nLevel - 2) * 10);
 
             aBody.push([
                 { text: sCodeColumn, style: sRowStyle, alignment: "left" },
@@ -1000,6 +1134,46 @@ sap.ui.define([
 
         flushDetails();
         closeCurrentRoot();
+
+        // Post-procesamiento: eliminar encabezados de grupo vacíos (sin datos debajo)
+        var aFilteredBody = [];
+        for (var idx = 0; idx < aBody.length; idx++) {
+            var row = aBody[idx];
+            var sRowSt = (row[1] && row[1].style) || (row[0] && row[0].style) || "";
+
+            // Filas de datos, estructurales o subtotales: siempre mantener
+            if (sRowSt !== "rowParent" && sRowSt !== "rowGroup") {
+                aFilteredBody.push(row);
+                continue;
+            }
+
+            // Para rowParent / rowGroup: verificar si tiene filas de datos debajo
+            var nInd = (row[1] && row[1].margin && row[1].margin[0]) || 0;
+            var bHasChildren = false;
+
+            for (var jdx = idx + 1; jdx < aBody.length; jdx++) {
+                var nextR = aBody[jdx];
+                var sNSt = (nextR[1] && nextR[1].style) || (nextR[0] && nextR[0].style) || "";
+                var nNInd = (nextR[1] && nextR[1].margin && nextR[1].margin[0]) || 0;
+
+                // Fila de datos a mayor profundidad → el grupo tiene contenido
+                if ((sNSt === "rowItem" || sNSt === "rowDetail") && nNInd > nInd) {
+                    bHasChildren = true;
+                    break;
+                }
+
+                // Encabezado al mismo nivel o superior → detener búsqueda
+                if ((sNSt === "rowParent" || sNSt === "rowGroup" ||
+                     sNSt === "rowGroupRoot" || sNSt === "subtotalLabel") && nNInd <= nInd) {
+                    break;
+                }
+            }
+
+            if (bHasChildren) {
+                aFilteredBody.push(row);
+            }
+        }
+        aBody = aFilteredBody;
 
         if (aBody.length === 0) {
             aBody.push([{ text: "No hay datos disponibles.", colSpan: 3, alignment: "center", italics: true }, {}, {}]);
